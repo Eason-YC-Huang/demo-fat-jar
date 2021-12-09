@@ -1,0 +1,41 @@
+plugins {
+    id 'java'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+}
+
+jar{
+    archiveFileName = 'demo.jar'
+
+    manifest { attributes('Main-Class': 'com.eason.Main') }
+
+    duplicatesStrategy = 'EXCLUDE'
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    } {
+        exclude(["META-INF/*.SF", "META-INF/*.DSA", "META-INF/*.RSA"])
+    }
+}
+
+task pkgJar(type: Jar){
+    dependsOn("classes")
+    archiveFileName = 'demo.jar'
+
+    manifest { attributes('Main-Class': 'com.eason.Main') }
+
+    duplicatesStrategy = 'EXCLUDE'
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    } {
+        exclude(["META-INF/*.SF", "META-INF/*.DSA", "META-INF/*.RSA"])
+    }
+}
+
+group 'com.eason'
+version '1.0-SNAPSHOT'
+java.sourceCompatibility = JavaVersion.VERSION_17
